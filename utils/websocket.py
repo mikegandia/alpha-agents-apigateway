@@ -91,6 +91,7 @@ class WebSocketServer:
                 user_id = metadata.get("user_id")
                 tab_id = metadata.get("tab_id")
                 agent = metadata.get("agent")
+                asset = metadata.get("asset")
                 # Optionally store them in a common_metadata dictionary if you want
                 common_metadata = {
                     "agent": agent,
@@ -136,6 +137,7 @@ class WebSocketServer:
             try:
                 # Build a dictionary representing the "job" or "analysis" that includes multiple images
                 job_data = {
+                    "asset": asset,
                     "agent": agent,
                     "tab_id": tab_id,
                     "user_id": user_id,

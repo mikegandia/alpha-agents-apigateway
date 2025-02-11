@@ -13,6 +13,7 @@ class AnalysisTaskManager:
         logger.info("AnalysisTaskManager initialized")
 
     async def publish_analysis_task(self,
+                                    asset: str,
                                     user_id: str,
                                     tab_id: str,
                                     job_id: str,
@@ -28,6 +29,7 @@ class AnalysisTaskManager:
         """
         job = {
             "task_type": "analysis_task",
+            "asset": asset,
             "job_id": job_id,
             "user_id": user_id,
             "tab_id": tab_id,
