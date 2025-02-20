@@ -158,7 +158,9 @@ class WebSocketServer:
                 # Send a single response to confirm the entire batch was processed
                 await websocket.send(json.dumps({
                     "message": "Server received images and started processing",
-                    "job_id": job_data["job_id"]
+                    "job_id": job_data["job_id"],
+                    "asset": asset,
+                    "agent": agent,
                 }))
             except Exception as e:
                 logger.error(f"Failed to process multiple images for user={user_id}: {e}")
