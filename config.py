@@ -10,7 +10,7 @@ load_dotenv()
 # --------------------------
 # General Configuration
 # --------------------------
-PORT = int(os.getenv("PORT", 8000))
+PORT = int(os.getenv("PORT", 8080))
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 # --------------------------
