@@ -19,4 +19,12 @@ jobs:
         echo "EC2_SSH_KEY=${{ secrets.EC2_SSH_KEY != '' && '✅ Set' || '❌ Missing' }}"
 
     - name: Deploy to EC2
-      uses: appleboy/ssh-action
+      uses: appleboy/ssh-action@master    # ✅ Correct use of `uses`
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ubuntu
+        key: ${{ secrets.EC2_SSH_KEY }}
+        script: |
+          cd ~/alpha-agents-apigateway
+          git pull origin main
+          sudo supervisorctl restart alpha_agents_api_gateway
