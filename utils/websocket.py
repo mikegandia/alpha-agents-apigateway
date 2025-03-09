@@ -58,6 +58,8 @@ class WebSocketServer:
         user_id = None  # track userId from the first chunk
         tab_id = None   # track tabId from the first chunk
         agent = None    # track agent from the first chunk
+        user_instructions = None
+        user_prompt = None
 
         while offset < total_length:
             # 1) We must have 4 bytes for metadata length
@@ -92,6 +94,8 @@ class WebSocketServer:
                 tab_id = metadata.get("tab_id")
                 agent = metadata.get("agent")
                 asset = metadata.get("asset")
+                user_instructions = metadata.get("user_instructions")
+                user_prompt = metadata.get("user_prompt")
                 # Optionally store them in a common_metadata dictionary if you want
                 common_metadata = {
                     "agent": agent,
@@ -136,6 +140,7 @@ class WebSocketServer:
 
             try:
                 # Build a dictionary representing the "job" or "analysis" that includes multiple images
+                job_id = metadata.get("job_id", str(uuid.uuid4()))
                 job_data = {
                     "asset": asset,
                     "agent": agent,
@@ -144,9 +149,11 @@ class WebSocketServer:
                     "action_type": common_metadata.get("action_type"),
                     "filenames": images_filenames,       # array of just the names
                     "file_paths": images_file_paths,     # array of actual saved paths
-                    "job_id": str(uuid.uuid4()),  # will be generated
+                    "job_id": job_id,  # will be generated
                     "status": "PENDING",
                     "websocket_id": id(websocket),
+                    "user_instructions": user_instructions,
+                    "user_prompt": user_prompt,
                     # you can add more fields as desired
                 }
 

@@ -32,13 +32,14 @@ class AnalysisRouter:
                 }
         """
         job_id = metadata.get("job_id", str(random.randint(1000, 9999)))
+        status = metadata.get("status", "PENDING")
         data = {
             "job_id": job_id,
             "user_id": metadata["user_id"],
             "tab_id": metadata["tab_id"],
             "websocket_id": id(metadata["websocket"]),
             "model_choice": metadata["agent"],
-            "status": "PENDING"
+            "status": status
         }
 
         self.wsm.add_connection( data["websocket_id"],metadata["websocket"])
