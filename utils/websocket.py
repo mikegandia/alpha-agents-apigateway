@@ -59,7 +59,9 @@ class WebSocketServer:
         tab_id = None   # track tabId from the first chunk
         agent = None    # track agent from the first chunk
         user_instructions = None
-        user_prompt = None
+        agent_query = None
+        prompt = None
+        message_id = None
 
         while offset < total_length:
             # 1) We must have 4 bytes for metadata length
@@ -95,7 +97,9 @@ class WebSocketServer:
                 agent = metadata.get("agent")
                 asset = metadata.get("asset")
                 user_instructions = metadata.get("user_instructions")
-                user_prompt = metadata.get("user_prompt")
+                prompt = metadata.get("prompt")
+                agent_query = metadata.get("agent_query")
+                message_id = metadata.get("message_id", "")
                 # Optionally store them in a common_metadata dictionary if you want
                 common_metadata = {
                     "agent": agent,
@@ -126,7 +130,12 @@ class WebSocketServer:
 
             # Collect for single-job usage
             images_file_paths.append(file_path)
-            images_filenames.append(metadata.get("filename", "unknown"))
+            filename = metadata.get("filename", "unknown")
+            
+            if filename is "unknown":
+                images_filenames = []
+            else:
+                images_filenames.append(metadata.get("filename", "unknown"))
 
             # We do NOT call create_analysis() here. We'll do it after the loop.
 
@@ -140,20 +149,29 @@ class WebSocketServer:
 
             try:
                 # Build a dictionary representing the "job" or "analysis" that includes multiple images
-                job_id = metadata.get("job_id", str(uuid.uuid4()))
+                job_id = metadata.get("job_id")
+                status = metadata.get("status", "PENDING")
+                if job_id is None:
+                    job_id = str(uuid.uuid4())
+                    chat = False
+                else:
+                    chat = True
                 job_data = {
                     "asset": asset,
                     "agent": agent,
                     "tab_id": tab_id,
                     "user_id": user_id,
                     "action_type": common_metadata.get("action_type"),
-                    "filenames": images_filenames,       # array of just the names
-                    "file_paths": images_file_paths,     # array of actual saved paths
                     "job_id": job_id,  # will be generated
                     "status": "PENDING",
                     "websocket_id": id(websocket),
+                    "is_chat": chat,
                     "user_instructions": user_instructions,
-                    "user_prompt": user_prompt,
+                    "agent_query": agent_query,
+                    "prompt": prompt,
+                    "message_id": message_id,
+                    "filenames": images_filenames,       # array of just the names
+                    "file_paths": images_file_paths,     # array of actual saved paths
                     # you can add more fields as desired
                 }
 

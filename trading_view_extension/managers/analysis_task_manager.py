@@ -19,11 +19,14 @@ class AnalysisTaskManager:
                                     job_id: str,
                                     s3_urls: List[str],
                                     agent: str,
-                                    user_instructions: str,
-                                    user_prompt: str,
                                     action_type: str,
                                     status:str,
                                     websocket_id:str,
+                                    is_chat: bool,
+                                    user_instructions: str,
+                                    agent_query: str,
+                                    prompt: str,
+                                    message_id: str,
                                     filenames:List[str],
                                     file_paths:List[str]) -> None:
         """
@@ -37,11 +40,14 @@ class AnalysisTaskManager:
             "tab_id": tab_id,
             "s3_urls": s3_urls,
             "agent": agent,
-            "user_instructions": user_instructions,
-            "user_prompt": user_prompt,
             "action_type": action_type,
             "status": status,
             "websocket_id": websocket_id,
+            "is_chat":is_chat,
+            "user_instructions": user_instructions,
+            "agent_query": agent_query,
+            "prompt": prompt,
+            "message_id": message_id,
             "filenames" : filenames,
             "file_paths":file_paths
         }

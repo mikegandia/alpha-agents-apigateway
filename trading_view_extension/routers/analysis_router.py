@@ -23,8 +23,13 @@ class AnalysisRouter:
         """
         try:
             # Upload all file paths to S3 and get the S3 URLs
-            s3_urls = upload_to_s3(data.get('file_paths', []))
-            # Add S3 URLs to data
+            file_paths = data.get('file_paths', [])
+            file_names = data.get('filenames', [])
+            s3_urls = []
+            if file_names == []:
+                pass
+            else:
+                s3_urls = upload_to_s3(file_paths)
             data['s3_urls'] = s3_urls
             self.db.insert_job(data)  # Use DBConnection instance
             await self.task_manager.publish_analysis_task(**data)
