@@ -34,7 +34,7 @@ logger = logging.getLogger(__name__)
 # --------------------------
 # WebSocket host and port
 # --------------------------
-WEBSOCKET_HOST = os.getenv("WEBSOCKET_HOST", "localhost")
+WEBSOCKET_HOST = os.getenv("WEBSOCKET_HOST", "0.0.0.0")
 WEBSOCKET_PORT = int(os.getenv("PORT", 8080))
 
 # --------------------------

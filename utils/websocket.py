@@ -59,6 +59,7 @@ class WebSocketServer:
         tab_id = None   # track tabId from the first chunk
         agent = None    # track agent from the first chunk
         user_instructions = None
+        email_id = None
         agent_query = None
         prompt = None
         message_id = None
@@ -97,6 +98,7 @@ class WebSocketServer:
                 agent = metadata.get("agent")
                 asset = metadata.get("asset")
                 user_instructions = metadata.get("user_instructions")
+                email_id = metadata.get("email_id")
                 prompt = metadata.get("prompt")
                 agent_query = metadata.get("agent_query")
                 message_id = metadata.get("message_id", "")
@@ -167,6 +169,7 @@ class WebSocketServer:
                     "websocket_id": id(websocket),
                     "is_chat": chat,
                     "user_instructions": user_instructions,
+                    "email_id": email_id,
                     "agent_query": agent_query,
                     "prompt": prompt,
                     "message_id": message_id,
